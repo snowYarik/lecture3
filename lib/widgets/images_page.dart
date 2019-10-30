@@ -37,17 +37,20 @@ class _ImagesPageState extends State<ImagesPage> {
             crossAxisCount: orientation == Orientation.portrait ? 2 : 3,
           ),
           itemBuilder: (context, index) {
-            return Container(
-              margin: const EdgeInsets.all(5.0),
-              child: ImageItem(
-                imageUrl: _imageUrls[index],
-                onTapAction: () =>
-                    _navigateToDetailImage(context, _imageUrls[index]),
-              ),
-            );
+            return _gridImageItem(_imageUrls[index]);
           },
         );
       },
+    );
+  }
+
+  Widget _gridImageItem(String imageUrl) {
+    return Container(
+      margin: const EdgeInsets.all(5.0),
+      child: ImageItem(
+        imageUrl: imageUrl,
+        onTapAction: () => _navigateToDetailImage(context, imageUrl),
+      ),
     );
   }
 
@@ -82,7 +85,7 @@ class _ImagesPageState extends State<ImagesPage> {
     _gridScrollController.animateTo(
       2 * _gridScrollController.position.maxScrollExtent,
       curve: Curves.easeOut,
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 300),
     );
   }
 }
