@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ImageItem extends StatelessWidget {
-  const ImageItem(
-      {Key key, @required String imageUrl, VoidCallback onTapAction})
-      : _imageUrl = imageUrl,
+  const ImageItem({
+    Key key,
+    @required String imageUrl,
+    VoidCallback onTapAction,
+  })  : _imageUrl = imageUrl,
         _onTapAction = onTapAction,
         super(key: key);
 
@@ -17,10 +19,12 @@ class ImageItem extends StatelessWidget {
       image: NetworkImage(
         _imageUrl,
       ),
-      fit: BoxFit.fill,
-      child: InkWell(
-        onTap: () => _onTapAction(),
-      ),
+      fit: BoxFit.fitWidth,
+      child: InkWell(onTap: () {
+        if (_onTapAction != null) {
+          _onTapAction();
+        }
+      }),
     );
   }
 }

@@ -11,8 +11,8 @@ class ImagesPage extends StatefulWidget {
 
 class _ImagesPageState extends State<ImagesPage> {
   final _imageUrls = <String>[];
-
   final _gridScrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,20 +28,24 @@ class _ImagesPageState extends State<ImagesPage> {
   }
 
   Widget _imageGrid(BuildContext context) {
-    return GridView.builder(
-      itemCount: _imageUrls.length,
-      controller: _gridScrollController,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: _imageUrls.length,
-      ),
-      itemBuilder: (context, index) {
-        return Container(
-          margin: const EdgeInsets.all(5.0),
-          child: ImageItem(
-            imageUrl: _imageUrls[index],
-            onTapAction: () =>
-                _navigateToDetailImage(context, _imageUrls[index]),
+    return OrientationBuilder(
+      builder: (context, orientation) {
+        return GridView.builder(
+          itemCount: _imageUrls.length,
+          controller: _gridScrollController,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: orientation == Orientation.portrait ? 2 : 3,
           ),
+          itemBuilder: (context, index) {
+            return Container(
+              margin: const EdgeInsets.all(5.0),
+              child: ImageItem(
+                imageUrl: _imageUrls[index],
+                onTapAction: () =>
+                    _navigateToDetailImage(context, _imageUrls[index]),
+              ),
+            );
+          },
         );
       },
     );
@@ -62,10 +66,12 @@ class _ImagesPageState extends State<ImagesPage> {
     return FloatingActionButton(
       splashColor: Colors.blueGrey,
       child: Icon(Icons.add),
-      onPressed: () {
-        _imageUrls.add(_generateRandomUrl());
-        _animateToEnd();
-      },
+      onPressed: () => setState(
+        () {
+          _imageUrls.add(_generateRandomUrl());
+          _animateToEnd();
+        },
+      ),
     );
   }
 
@@ -74,7 +80,7 @@ class _ImagesPageState extends State<ImagesPage> {
 
   void _animateToEnd() {
     _gridScrollController.animateTo(
-      _gridScrollController.position.maxScrollExtent,
+      2 * _gridScrollController.position.maxScrollExtent,
       curve: Curves.easeOut,
       duration: const Duration(milliseconds: 200),
     );
